@@ -86,6 +86,7 @@ class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        MusicManager.init(this)
         MusicManager.playBackgroundMusic()
 
         val root = LinearLayout(this).apply {
@@ -195,33 +196,30 @@ class MainActivity : Activity() {
         }
         container.addView(title)
 
-        val btnTrack1 = Button(this).apply {
-            text = "🎵 Мелодия 1"
-            setBackgroundColor(Color.parseColor("#2d5a3d"))
-            setTextColor(Color.parseColor("#4ade80"))
-            setOnClickListener {
-                MusicManager.currentTrackIndex = 0
-                MusicManager.stopBackgroundMusic()
-                MusicManager.playBackgroundMusic()
-            }
-        }
-        container.addView(btnTrack1)
-
-        val btnTrack2 = Button(this).apply {
-            text = "🎵 Мелодия 2"
+        val btnResume = Button(this).apply {
+            text = "▶️ Продолжить песню"
             setBackgroundColor(Color.parseColor("#2d5a3d"))
             setTextColor(Color.parseColor("#4ade80"))
             setPadding(0, 16, 0, 0)
             setOnClickListener {
-                MusicManager.currentTrackIndex = 1
-                MusicManager.stopBackgroundMusic()
                 MusicManager.playBackgroundMusic()
             }
         }
-        container.addView(btnTrack2)
+        container.addView(btnResume)
+
+        val btnPause = Button(this).apply {
+            text = "⏸️ Остановить временно"
+            setBackgroundColor(Color.parseColor("#4a3d2d"))
+            setTextColor(Color.parseColor("#facc15"))
+            setPadding(0, 16, 0, 0)
+            setOnClickListener {
+                MusicManager.pauseBackgroundMusic()
+            }
+        }
+        container.addView(btnPause)
 
         val btnStop = Button(this).apply {
-            text = "⏹️ Выключить музыку"
+            text = "⏹️ Полностью выключить"
             setBackgroundColor(Color.parseColor("#4a2d2d"))
             setTextColor(Color.parseColor("#ef4444"))
             setPadding(0, 16, 0, 0)
