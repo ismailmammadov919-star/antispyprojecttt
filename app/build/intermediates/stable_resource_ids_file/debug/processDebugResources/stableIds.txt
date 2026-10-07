@@ -1,0 +1,1 @@
+com.example.antispy:drawable/ic_launcher = 0x7f010000

@@ -1,0 +1,77 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.example.antispy"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="26"
+9        android:targetSdkVersion="34" />
+10
+11    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+11-->C:\Users\HP\Desktop\antispyprojecttt-main\app\src\main\AndroidManifest.xml:5:5-77
+11-->C:\Users\HP\Desktop\antispyprojecttt-main\app\src\main\AndroidManifest.xml:5:22-74
+12    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+12-->C:\Users\HP\Desktop\antispyprojecttt-main\app\src\main\AndroidManifest.xml:6:5-77
+12-->C:\Users\HP\Desktop\antispyprojecttt-main\app\src\main\AndroidManifest.xml:6:22-74
+13    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+13-->C:\Users\HP\Desktop\antispyprojecttt-main\app\src\main\AndroidManifest.xml:7:5-81
+13-->C:\Users\HP\Desktop\antispyprojecttt-main\app\src\main\AndroidManifest.xml:7:22-78
+14
+15    <application
+15-->C:\Users\HP\Desktop\antispyprojecttt-main\app\src\main\AndroidManifest.xml:9:5-37:19
+16        android:allowBackup="false"
+16-->C:\Users\HP\Desktop\antispyprojecttt-main\app\src\main\AndroidManifest.xml:10:9-36
+17        android:debuggable="true"
+18        android:extractNativeLibs="false"
+19        android:icon="@drawable/ic_launcher"
+19-->C:\Users\HP\Desktop\antispyprojecttt-main\app\src\main\AndroidManifest.xml:11:9-45
+20        android:label="fellsafewithilens"
+20-->C:\Users\HP\Desktop\antispyprojecttt-main\app\src\main\AndroidManifest.xml:12:9-42
+21        android:testOnly="true"
+22        android:theme="@android:style/Theme.Material.Light.NoActionBar" >
+22-->C:\Users\HP\Desktop\antispyprojecttt-main\app\src\main\AndroidManifest.xml:13:9-72
+23        <activity
+23-->C:\Users\HP\Desktop\antispyprojecttt-main\app\src\main\AndroidManifest.xml:15:9-22:20
+24            android:name="com.example.antispy.MainActivity"
+24-->C:\Users\HP\Desktop\antispyprojecttt-main\app\src\main\AndroidManifest.xml:16:13-41
+25            android:exported="true" >
+25-->C:\Users\HP\Desktop\antispyprojecttt-main\app\src\main\AndroidManifest.xml:17:13-36
+26            <intent-filter>
+26-->C:\Users\HP\Desktop\antispyprojecttt-main\app\src\main\AndroidManifest.xml:18:13-21:29
+27                <action android:name="android.intent.action.MAIN" />
+27-->C:\Users\HP\Desktop\antispyprojecttt-main\app\src\main\AndroidManifest.xml:19:17-69
+27-->C:\Users\HP\Desktop\antispyprojecttt-main\app\src\main\AndroidManifest.xml:19:25-66
+28
+29                <category android:name="android.intent.category.LAUNCHER" />
+29-->C:\Users\HP\Desktop\antispyprojecttt-main\app\src\main\AndroidManifest.xml:20:17-77
+29-->C:\Users\HP\Desktop\antispyprojecttt-main\app\src\main\AndroidManifest.xml:20:27-74
+30            </intent-filter>
+31        </activity>
+32
+33        <service
+33-->C:\Users\HP\Desktop\antispyprojecttt-main\app\src\main\AndroidManifest.xml:24:9-27:72
+34            android:name="com.example.antispy.ScanJobService"
+34-->C:\Users\HP\Desktop\antispyprojecttt-main\app\src\main\AndroidManifest.xml:25:13-43
+35            android:exported="false"
+35-->C:\Users\HP\Desktop\antispyprojecttt-main\app\src\main\AndroidManifest.xml:26:13-37
+36            android:permission="android.permission.BIND_JOB_SERVICE" />
+36-->C:\Users\HP\Desktop\antispyprojecttt-main\app\src\main\AndroidManifest.xml:27:13-69
+37        <service
+37-->C:\Users\HP\Desktop\antispyprojecttt-main\app\src\main\AndroidManifest.xml:29:9-36:19
+38            android:name="com.example.antispy.DnsVpnService"
+38-->C:\Users\HP\Desktop\antispyprojecttt-main\app\src\main\AndroidManifest.xml:30:13-42
+39            android:exported="false"
+39-->C:\Users\HP\Desktop\antispyprojecttt-main\app\src\main\AndroidManifest.xml:31:13-37
+40            android:permission="android.permission.BIND_VPN_SERVICE" >
+40-->C:\Users\HP\Desktop\antispyprojecttt-main\app\src\main\AndroidManifest.xml:32:13-69
+41            <intent-filter>
+41-->C:\Users\HP\Desktop\antispyprojecttt-main\app\src\main\AndroidManifest.xml:33:13-35:29
+42                <action android:name="android.net.VpnService" />
+42-->C:\Users\HP\Desktop\antispyprojecttt-main\app\src\main\AndroidManifest.xml:34:17-65
+42-->C:\Users\HP\Desktop\antispyprojecttt-main\app\src\main\AndroidManifest.xml:34:25-62
+43            </intent-filter>
+44        </service>
+45    </application>
+46
+47</manifest>
