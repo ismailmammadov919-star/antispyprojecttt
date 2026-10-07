@@ -172,7 +172,7 @@ class MainActivity : Activity() {
         when (tab) {
             0 -> frameContent.addView(createVpnTab())
             1 -> frameContent.addView(createAppsTab())
-            2 -> frameContent.addView(createSettingsTab())
+            2 -> frameContent.addView(SettingsManager.createSettingsTab(this))
             3 -> frameContent.addView(TaskSolver.createSolverTab(this))
             4 -> frameContent.addView(createGamesTab())
         }
@@ -354,22 +354,6 @@ class MainActivity : Activity() {
         scroll.addView(appsList)
         scanApps()
         return scroll
-    }
-
-    private fun createSettingsTab(): View {
-        val settings = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setBackgroundColor(Color.parseColor("#121212"))
-            setPadding(16, 20, 16, 20)
-        }
-        val text = TextView(this).apply {
-            text = "Настройки пока пустые.\nВсе уже включено."
-            textSize = 16f
-            setTextColor(Color.parseColor("#888888"))
-            setPadding(16, 40, 16, 16)
-        }
-        settings.addView(text)
-        return settings
     }
 
     private fun toggleVpn() {
