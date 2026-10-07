@@ -87,7 +87,6 @@ class MainActivity : Activity() {
         super.onCreate(savedInstanceState)
 
         MusicManager.init(this)
-        MusicManager.playBackgroundMusic()
 
         val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -196,8 +195,21 @@ class MainActivity : Activity() {
         }
         container.addView(title)
 
+        val btnPickFile = Button(this).apply {
+            text = "📁 Выбрать песню из папок"
+            setBackgroundColor(Color.parseColor("#2d3a5a"))
+            setTextColor(Color.parseColor("#60a5fa"))
+            setOnClickListener {
+                val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+                    type = "audio/*"
+                }
+                startActivityForResult(intent, 200)
+            }
+        }
+        container.addView(btnPickFile)
+
         val btnResume = Button(this).apply {
-            text = "▶️ Продолжить песню"
+            text = "▶️ Продолжить"
             setBackgroundColor(Color.parseColor("#2d5a3d"))
             setTextColor(Color.parseColor("#4ade80"))
             setPadding(0, 16, 0, 0)
@@ -208,7 +220,7 @@ class MainActivity : Activity() {
         container.addView(btnResume)
 
         val btnPause = Button(this).apply {
-            text = "⏸️ Остановить временно"
+            text = "⏸️ Пауза"
             setBackgroundColor(Color.parseColor("#4a3d2d"))
             setTextColor(Color.parseColor("#facc15"))
             setPadding(0, 16, 0, 0)
@@ -219,7 +231,7 @@ class MainActivity : Activity() {
         container.addView(btnPause)
 
         val btnStop = Button(this).apply {
-            text = "⏹️ Полностью выключить"
+            text = "⏹️ Выключить"
             setBackgroundColor(Color.parseColor("#4a2d2d"))
             setTextColor(Color.parseColor("#ef4444"))
             setPadding(0, 16, 0, 0)
@@ -431,6 +443,11 @@ class MainActivity : Activity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 100 && resultCode == RESULT_OK) {
             startVpn()
+        }
+        if (requestCode == 200 && resultCode == RESULT_OK) {
+            data?.data?.let { uri ->
+                MusicManager.playCustomMusic(uri)
+            }
         }
     }
 
