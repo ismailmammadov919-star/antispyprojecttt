@@ -10,19 +10,24 @@ object MusicManager {
 
     private var audioTrack: AudioTrack? = null
     @Volatile private var isPlaying = false
+    private var musicThread: Thread? = null
     var currentTrackIndex = 0
 
     fun playBackgroundMusic() {
         if (isPlaying) return
         isPlaying = true
-        Thread { generateAndPlayTone() }.start()
+        musicThread = Thread { generateAndPlayTone() }.apply { start() }
     }
 
     fun stopBackgroundMusic() {
         isPlaying = false
-        audioTrack?.stop()
-        audioTrack?.release()
+        try {
+            audioTrack?.stop()
+            audioTrack?.release()
+        } catch (_: Exception) {}
         audioTrack = null
+        musicThread?.interrupt()
+        musicThread = null
     }
 
     private fun generateAndPlayTone() {
@@ -30,52 +35,56 @@ object MusicManager {
         val duration = 8
         val bufferSize = sampleRate * duration
 
-        val audioAttributes = AudioAttributes.Builder()
-            .setUsage(AudioAttributes.USAGE_MEDIA)
-            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-            .build()
+        try {
+            val audioAttributes = AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_MEDIA)
+                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .build()
 
-        val audioFormat = AudioFormat.Builder()
-            .setSampleRate(sampleRate)
-            .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
-            .setChannelMask(AudioFormat.CHANNEL_OUT_MONO)
-            .build()
+            val audioFormat = AudioFormat.Builder()
+                .setSampleRate(sampleRate)
+                .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+                .setChannelMask(AudioFormat.CHANNEL_OUT_MONO)
+                .build()
 
-        audioTrack = AudioTrack(
-            audioAttributes,
-            audioFormat,
-            bufferSize,
-            AudioTrack.MODE_STREAM,
-            AudioManager.AUDIO_SESSION_ID_GENERATE
-        )
+            audioTrack = AudioTrack(
+                audioAttributes,
+                audioFormat,
+                bufferSize,
+                AudioTrack.MODE_STREAM,
+                AudioManager.AUDIO_SESSION_ID_GENERATE
+            )
 
-        audioTrack?.play()
+            audioTrack?.play()
 
-        val frequencies = if (currentTrackIndex == 0) {
-            floatArrayOf(262f, 294f, 330f, 349f, 392f, 349f, 330f, 294f)
-        } else {
-            floatArrayOf(392f, 330f, 294f, 262f, 330f, 392f, 440f, 392f)
-        }
-
-        val noteDuration = sampleRate / 4
-        val audioBuffer = ShortArray(noteDuration)
-
-        for (freq in frequencies) {
-            if (!isPlaying) break
-
-            for (i in 0 until noteDuration) {
-                val angle = 2.0 * Math.PI * freq * i / sampleRate
-                val sample = (Short.MAX_VALUE * 0.3 * sin(angle)).toInt().toShort()
-                audioBuffer[i] = sample
+            val frequencies = if (currentTrackIndex == 0) {
+                floatArrayOf(262f, 294f, 330f, 349f, 392f, 349f, 330f, 294f)
+            } else {
+                floatArrayOf(392f, 330f, 294f, 262f, 330f, 392f, 440f, 392f)
             }
-            audioTrack?.write(audioBuffer, 0, noteDuration)
-        }
 
-        val silence = ShortArray(sampleRate / 2)
-        audioTrack?.write(silence, 0, silence.size)
+            val noteDuration = sampleRate / 4
+            val audioBuffer = ShortArray(noteDuration)
 
-        if (isPlaying) {
-            generateAndPlayTone()
+            for (freq in frequencies) {
+                if (!isPlaying) break
+
+                for (i in 0 until noteDuration) {
+                    val angle = 2.0 * Math.PI * freq * i / sampleRate
+                    val sample = (Short.MAX_VALUE * 0.3 * sin(angle)).toInt().toShort()
+                    audioBuffer[i] = sample
+                }
+                audioTrack?.write(audioBuffer, 0, noteDuration)
+            }
+
+            val silence = ShortArray(sampleRate / 2)
+            audioTrack?.write(silence, 0, silence.size)
+
+            if (isPlaying) {
+                generateAndPlayTone()
+            }
+        } catch (e: Exception) {
+            isPlaying = false
         }
     }
 }
