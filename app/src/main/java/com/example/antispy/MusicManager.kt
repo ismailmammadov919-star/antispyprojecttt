@@ -2,15 +2,15 @@ package com.example.antispy
 
 import android.media.AudioAttributes
 import android.media.AudioFormat
+import android.media.AudioManager
 import android.media.AudioTrack
-import android.os.Handler
-import android.os.Looper
 import kotlin.math.sin
 
 object MusicManager {
 
     private var audioTrack: AudioTrack? = null
     @Volatile private var isPlaying = false
+    var currentTrackIndex = 0
 
     fun playBackgroundMusic() {
         if (isPlaying) return
@@ -45,14 +45,19 @@ object MusicManager {
             audioAttributes,
             audioFormat,
             bufferSize,
-            AudioTrack.MODE_STREAM
+            AudioTrack.MODE_STREAM,
+            AudioManager.AUDIO_SESSION_ID_GENERATE
         )
 
         audioTrack?.play()
 
-        val frequencies = floatArrayOf(262f, 294f, 330f, 349f, 392f, 349f, 330f, 294f)
-        val noteDuration = sampleRate / 4
+        val frequencies = if (currentTrackIndex == 0) {
+            floatArrayOf(262f, 294f, 330f, 349f, 392f, 349f, 330f, 294f)
+        } else {
+            floatArrayOf(392f, 330f, 294f, 262f, 330f, 392f, 440f, 392f)
+        }
 
+        val noteDuration = sampleRate / 4
         val audioBuffer = ShortArray(noteDuration)
 
         for (freq in frequencies) {
@@ -60,7 +65,7 @@ object MusicManager {
 
             for (i in 0 until noteDuration) {
                 val angle = 2.0 * Math.PI * freq * i / sampleRate
-                val sample = (Short.MAX_VALUE * 0.3 * sin(angle)).toShort()
+                val sample = (Short.MAX_VALUE * 0.3 * sin(angle)).toInt().toShort()
                 audioBuffer[i] = sample
             }
             audioTrack?.write(audioBuffer, 0, noteDuration)
