@@ -172,10 +172,67 @@ class MainActivity : Activity() {
         when (tab) {
             0 -> frameContent.addView(createVpnTab())
             1 -> frameContent.addView(createAppsTab())
-            2 -> frameContent.addView(SettingsManager.createSettingsTab(this))
+            2 -> frameContent.addView(createSettingsTab())
             3 -> frameContent.addView(TaskSolver.createSolverTab(this))
             4 -> frameContent.addView(createGamesTab())
         }
+    }
+
+    private fun createSettingsTab(): View {
+        val scroll = ScrollView(this).apply {
+            setBackgroundColor(Color.parseColor("#121212"))
+        }
+        val container = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(16, 20, 16, 20)
+        }
+
+        val title = TextView(this).apply {
+            text = "⚙️ Настройки музыки"
+            textSize = 20f
+            setTextColor(Color.WHITE)
+            setPadding(0, 0, 0, 16)
+        }
+        container.addView(title)
+
+        val btnTrack1 = Button(this).apply {
+            text = "🎵 Мелодия 1"
+            setBackgroundColor(Color.parseColor("#2d5a3d"))
+            setTextColor(Color.parseColor("#4ade80"))
+            setOnClickListener {
+                MusicManager.currentTrackIndex = 0
+                MusicManager.stopBackgroundMusic()
+                MusicManager.playBackgroundMusic()
+            }
+        }
+        container.addView(btnTrack1)
+
+        val btnTrack2 = Button(this).apply {
+            text = "🎵 Мелодия 2"
+            setBackgroundColor(Color.parseColor("#2d5a3d"))
+            setTextColor(Color.parseColor("#4ade80"))
+            setPadding(0, 16, 0, 0)
+            setOnClickListener {
+                MusicManager.currentTrackIndex = 1
+                MusicManager.stopBackgroundMusic()
+                MusicManager.playBackgroundMusic()
+            }
+        }
+        container.addView(btnTrack2)
+
+        val btnStop = Button(this).apply {
+            text = "⏹️ Выключить музыку"
+            setBackgroundColor(Color.parseColor("#4a2d2d"))
+            setTextColor(Color.parseColor("#ef4444"))
+            setPadding(0, 16, 0, 0)
+            setOnClickListener {
+                MusicManager.stopBackgroundMusic()
+            }
+        }
+        container.addView(btnStop)
+
+        scroll.addView(container)
+        return scroll
     }
 
     private fun createGamesTab(): View {
