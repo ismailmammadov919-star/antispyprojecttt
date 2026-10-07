@@ -86,6 +86,8 @@ class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        MusicManager.playBackgroundMusic()
+
         val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setBackgroundColor(Color.parseColor("#121212"))
@@ -113,6 +115,11 @@ class MainActivity : Activity() {
     override fun onPause() {
         super.onPause()
         handler.removeCallbacks(uiUpdater)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        MusicManager.stopBackgroundMusic()
     }
 
     private fun createHeader(): View {
@@ -144,7 +151,7 @@ class MainActivity : Activity() {
             setPadding(0, 12, 0, 12)
         }
 
-        val tabs = listOf("🛡️ Защита", "📱 Приложения", "⚙️ Настройки")
+        val tabs = listOf("🛡️ Защита", "📦 Приложения", "⚙️ Настройки", "🤖 Задачи", "🎮 Игры")
         for ((i, tab) in tabs.withIndex()) {
             val btn = Button(this).apply {
                 text = tab
@@ -166,7 +173,21 @@ class MainActivity : Activity() {
             0 -> frameContent.addView(createVpnTab())
             1 -> frameContent.addView(createAppsTab())
             2 -> frameContent.addView(createSettingsTab())
+            3 -> frameContent.addView(TaskSolver.createSolverTab(this))
+            4 -> frameContent.addView(createGamesTab())
         }
+    }
+
+    private fun createGamesTab(): View {
+        val scroll = ScrollView(this)
+        val container = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(16, 20, 16, 20)
+        }
+        container.addView(GamesManager.createRockPaperScissors(this))
+        container.addView(GamesManager.createNumberGuessingGame(this))
+        scroll.addView(container)
+        return scroll
     }
 
     private fun createVpnTab(): View {
@@ -342,7 +363,7 @@ class MainActivity : Activity() {
             setPadding(16, 20, 16, 20)
         }
         val text = TextView(this).apply {
-            text = "Настройки пока пусты.\nВсё уже включено."
+            text = "Настройки пока пустые.\nВсе уже включено."
             textSize = 16f
             setTextColor(Color.parseColor("#888888"))
             setPadding(16, 40, 16, 16)
@@ -396,7 +417,7 @@ class MainActivity : Activity() {
                 else -> Color.rgb(200, 170, 0)
             }
             val item = TextView(this).apply {
-                text = "📱 ${f.label} (Риск: ${f.score})\n📂 ${f.pkg}\n\n⚠️ Выявленные доступы и угрозы:\n${f.reasons.joinToString("\n")}"
+                text = "📦 ${f.label} (Риск: ${f.score})\n📋 ${f.pkg}\n\n⚠️ Выявленные доступы и угрозы:\n${f.reasons.joinToString("\n")}"
                 textSize = 13f
                 setTextColor(color)
                 setPadding(16, 16, 16, 16)
