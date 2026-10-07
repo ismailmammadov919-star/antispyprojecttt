@@ -32,7 +32,7 @@ object MusicManager {
 
     private fun generateAndPlayTone() {
         val sampleRate = 44100
-        val duration = 8
+        val duration = 12
         val bufferSize = sampleRate * duration
 
         try {
@@ -58,12 +58,12 @@ object MusicManager {
             audioTrack?.play()
 
             val frequencies = if (currentTrackIndex == 0) {
-                floatArrayOf(262f, 294f, 330f, 349f, 392f, 349f, 330f, 294f)
+                floatArrayOf(330f, 392f, 440f, 523f, 440f, 392f, 330f, 294f, 262f, 294f, 330f, 392f)
             } else {
-                floatArrayOf(392f, 330f, 294f, 262f, 330f, 392f, 440f, 392f)
+                floatArrayOf(220f, 262f, 330f, 392f, 494f, 392f, 330f, 262f, 440f, 349f, 294f, 262f)
             }
 
-            val noteDuration = sampleRate / 4
+            val noteDuration = sampleRate / 6
             val audioBuffer = ShortArray(noteDuration)
 
             for (freq in frequencies) {
@@ -71,20 +71,5 @@ object MusicManager {
 
                 for (i in 0 until noteDuration) {
                     val angle = 2.0 * Math.PI * freq * i / sampleRate
-                    val sample = (Short.MAX_VALUE * 0.3 * sin(angle)).toInt().toShort()
-                    audioBuffer[i] = sample
-                }
-                audioTrack?.write(audioBuffer, 0, noteDuration)
-            }
-
-            val silence = ShortArray(sampleRate / 2)
-            audioTrack?.write(silence, 0, silence.size)
-
-            if (isPlaying) {
-                generateAndPlayTone()
-            }
-        } catch (e: Exception) {
-            isPlaying = false
-        }
-    }
-}
+                    val envelope = 1.0 - (i.toDouble() / noteDuration)
+                    val sample = (Short.MAX_VALUE * 0.2
