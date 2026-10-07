@@ -72,4 +72,20 @@ object MusicManager {
                 for (i in 0 until noteDuration) {
                     val angle = 2.0 * Math.PI * freq * i / sampleRate
                     val envelope = 1.0 - (i.toDouble() / noteDuration)
-                    val sample = (Short.MAX_VALUE * 0.2
+                    val sample = (Short.MAX_VALUE * 0.25 * sin(angle) * envelope).toInt().toShort()
+                    audioBuffer[i] = sample
+                }
+                audioTrack?.write(audioBuffer, 0, noteDuration)
+            }
+
+            val silence = ShortArray(sampleRate / 3)
+            audioTrack?.write(silence, 0, silence.size)
+
+            if (isPlaying) {
+                generateAndPlayTone()
+            }
+        } catch (e: Exception) {
+            isPlaying = false
+        }
+    }
+}
